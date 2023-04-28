@@ -1,0 +1,11 @@
+{
+  "name": "icd10-to-snomed",
+  "version": "1.0.0",
+  "description": "A package for generating and using ICD10-SNOMED mappings.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gaurav Vaidya <gaurav@renci.org>",
+  "license": "MIT"
+}
