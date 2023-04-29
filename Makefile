@@ -27,7 +27,7 @@ data/npm-installed:
 
 # We need rmlmapper.jar to actually apply the RML rules.
 bin/rmlmapper.jar: bin/
-	wget "https://github.com/RMLio/rmlmapper-java/releases/download/v6.1.3/rmlmapper-6.1.3-r367-all.jar" -O $@
+	wget -c "https://github.com/RMLio/rmlmapper-java/releases/download/v6.1.3/rmlmapper-6.1.3-r367-all.jar" -O $@
 
 #
 # DATA GENERATION

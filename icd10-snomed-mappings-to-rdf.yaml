@@ -12,7 +12,7 @@ mappings:
       - p: rdfs:label
         o: $(icd_concept_name)
       - p: skos:exactMatch
-        o: snomed:$(snomed_concept_code)
+        o: snomed:$(snomed_concept_code)~iri
   snomed_concepts:
     sources:
       - access: data/ICD_SNOMED_Map.csv
