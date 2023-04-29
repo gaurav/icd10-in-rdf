@@ -4,8 +4,12 @@
   "description": "A package for generating and using ICD10-SNOMED mappings.",
   "main": "index.js",
   "scripts": {
+    "yarrrml-parser": "yarrrml-parser",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Gaurav Vaidya <gaurav@renci.org>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@rmlio/yarrrml-parser": "^1.4.0"
+  }
 }

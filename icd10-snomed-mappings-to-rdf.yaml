@@ -1,0 +1,23 @@
+prefixes:
+  icd10: https://icd.who.int/browse10/2019/en#/
+  snomed: http://snomed.info/id/
+  skos: http://www.w3.org/2004/02/skos/core#
+mappings:
+  icd_concepts:
+    sources:
+      - access: data/ICD_SNOMED_Map.csv
+        referenceFormulation: csv
+    s: icd10:$(icd_concept_code)
+    po:
+      - p: rdfs:label
+        o: $(icd_concept_name)
+      - p: skos:exactMatch
+        o: snomed:$(snomed_concept_code)
+  snomed_concepts:
+    sources:
+      - access: data/ICD_SNOMED_Map.csv
+        referenceFormulation: csv
+    s: snomed:$(snomed_concept_code)
+    po:
+      - p: rdfs:label
+        o: $(snomed_concept_name)
