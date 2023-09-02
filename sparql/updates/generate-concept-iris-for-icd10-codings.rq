@@ -7,7 +7,6 @@ PREFIX fhir: <http://hl7.org/fhir/>
 # represent them in a more RDF-like way, as suggested by
 # https://www.hl7.org/fhir/rdf.html#representing-concepts
 
-# Query 1: find ICD-10 identifiers.
 INSERT {
 	?coding a ?concept_iri .
 	?coding rdfs:label ?label .
