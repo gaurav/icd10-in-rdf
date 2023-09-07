@@ -8,7 +8,9 @@ PREFIX fhir: <http://hl7.org/fhir/>
 # https://www.hl7.org/fhir/rdf.html#representing-concepts
 
 INSERT {
-	?coding a ?concept_iri
+	GRAPH <https://fhircat.org/reasoning1/concept-mappings> {
+		?coding a ?concept_iri
+	}
 } WHERE {
 	# Find codings that define an ICD-10 code.
 	?coding
