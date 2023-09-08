@@ -1,7 +1,7 @@
 PREFIX fhir: <http://hl7.org/fhir/>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 
-SELECT ?condition ?coding ?code ?display ?coding_iri ?snomed_iri
+SELECT ?condition ?coding ?code ?display ?coding_iri ?snomed_iri ?toplevel_iri ?toplevel_snomed_iri
 WHERE {
     ?condition fhir:Condition.code [ fhir:CodeableConcept.coding [
     # Get the ?coding that defines an ICD-10 code.
@@ -14,6 +14,12 @@ WHERE {
     fhir:Coding.code [ fhir:value ?code ]
     ] ] .
     OPTIONAL {
-        ?coding_iri skos:exactMatch ?snomed_iri .
+        ?coding_iri skos:exactMatch ?snomed_iri
+    }
+    OPTIONAL {
+        ?coding_iri skos:broader ?toplevel_iri
+    }
+    OPTIONAL {
+        ?toplevel_iri skos:exactMatch ?toplevel_snomed_iri
     }
 }
