@@ -18,8 +18,8 @@ WHERE {
     }
     OPTIONAL {
         ?coding_iri skos:broader ?toplevel_iri
-    }
-    OPTIONAL {
-        ?toplevel_iri skos:exactMatch ?toplevel_snomed_iri
+        OPTIONAL {
+            ?toplevel_iri skos:exactMatch ?toplevel_snomed_iri
+        }
     }
 }
