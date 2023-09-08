@@ -3,16 +3,20 @@ PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 
 SELECT ?condition ?coding ?code ?display ?coding_iri ?snomed_iri ?toplevel_iri ?toplevel_snomed_iri
 WHERE {
-    ?condition fhir:Condition.code [ fhir:CodeableConcept.coding [
-    # Get the ?coding that defines an ICD-10 code.
-    # ?coding
-    fhir:Coding.system [ fhir:value "http://hl7.org/fhir/sid/icd-10-cm"^^<http://www.w3.org/2001/XMLSchema#anyURI> ] ;
-    # Concept IRI
-    a ?coding_iri ;
-    # Find out the coding display and code.
-    fhir:Coding.display [ fhir:value ?display ] ;
-    fhir:Coding.code [ fhir:value ?code ]
-    ] ] .
+    ?condition fhir:Condition.code [
+        # Concept IRI
+        a ?coding_iri ;
+        fhir:CodeableConcept.coding [
+            # Get the ?coding that defines an ICD-10 code.
+            # ?coding
+            fhir:Coding.system [
+                fhir:value "http://hl7.org/fhir/sid/icd-10-cm"^^<http://www.w3.org/2001/XMLSchema#anyURI>
+            ] ;
+            # Find out the coding display and code.
+            fhir:Coding.display [ fhir:value ?display ] ;
+            fhir:Coding.code [ fhir:value ?code ]
+        ]
+    ]
     OPTIONAL {
         ?coding_iri skos:exactMatch ?snomed_iri
     }
