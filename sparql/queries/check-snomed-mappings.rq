@@ -1,29 +1,55 @@
 PREFIX fhir: <http://hl7.org/fhir/>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-SELECT ?condition ?coding ?code ?display ?coding_iri ?snomed_iri ?toplevel_iri ?toplevel_snomed_iri
+SELECT
+    ?condition ?coding ?code ?display ?coding_iri
+    ?coding_iri_label
+    ?snomed_iri ?snomed_iri_label
+    ?toplevel_iri
+    ?toplevel_snomed_iri ?toplevel_snomed_iri_label
 WHERE {
     ?condition fhir:Condition.code [
         # Concept IRI
-        fhir:CodeableConcept.coding [
-                a ?coding_iri ;
-            # Get the ?coding that defines an ICD-10 code.
-            # ?coding
-            fhir:Coding.system [
-                fhir:value "http://hl7.org/fhir/sid/icd-10-cm"^^<http://www.w3.org/2001/XMLSchema#anyURI>
-            ] ;
-            # Find out the coding display and code.
-            fhir:Coding.display [ fhir:value ?display ] ;
-            fhir:Coding.code [ fhir:value ?code ]
-        ]
-    ]
+        fhir:CodeableConcept.coding ?coding
+    ] .
+    # Filter to codings that only apply to ICD-10s.
+    ?coding fhir:Coding.system [
+        fhir:value "http://hl7.org/fhir/sid/icd-10-cm"^^<http://www.w3.org/2001/XMLSchema#anyURI>
+    ] .
+    # Get the ?coding_iri (concept IRI) that defines an ICD-10 code.
+    ?coding a ?coding_iri .
+
+    # Get some optional values:
+    # - Find out the coding display.
+    OPTIONAL {
+        ?coding fhir:Coding.display [ fhir:value ?display ]
+    }
+
+    # - Find out the exact match.
+    OPTIONAL {
+        ?coding fhir:Coding.code [ fhir:value ?code ]
+    }
+
+    # - Find out the coding_iri_label.
+    OPTIONAL {
+        ?coding_iri rdfs:label ?coding_iri_label
+    }
+
+    # Look up the SNOMED IRI for this exact coding IRI.
     OPTIONAL {
         ?coding_iri skos:exactMatch ?snomed_iri
+        OPTIONAL {
+            ?snomed_iri rdfs:label ?snomed_iri_label
+        }
     }
     OPTIONAL {
         ?coding_iri skos:broader ?toplevel_iri
         OPTIONAL {
             ?toplevel_iri skos:exactMatch ?toplevel_snomed_iri
+            OPTIONAL {
+                ?toplevel_snomed_iri rdfs:label ?toplevel_snomed_iri_label
+            }
         }
     }
 }
