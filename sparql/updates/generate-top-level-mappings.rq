@@ -1,0 +1,26 @@
+PREFIX fhir: <http://hl7.org/fhir/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+
+# For every ICD-10 code in this file, find a "top-level code" (e.g. ICD-10 code "R50.9" has a top-level code of "R50")
+# and convert that into a concept IRI. Rather than adding that directly to the coding as we did previously, we want to
+# regenerate the concept IRI (i.e. for `R50.9`) and then generate a triple to say that ICD-10:R50.9 skos:broader ICD-10:R50.
+
+INSERT {
+    GRAPH <https://fhircat.org/reasoning1/top-level-icd10-mappings> {
+        ?concept_iri_code skos:broader ?concept_iri_top_level
+    }
+}
+# SELECT ?concept_iri_code ?concept_iri_top_level
+WHERE {
+    { SELECT DISTINCT ?concept_iri_code ?concept_iri_top_level WHERE {
+        # Get the ?coding that defines an ICD-10 code.
+        ?coding
+        fhir:Coding.system [ fhir:value "http://hl7.org/fhir/sid/icd-10-cm"^^<http://www.w3.org/2001/XMLSchema#anyURI> ] ;
+        fhir:Coding.code [ fhir:value ?code ] .
+
+        FILTER CONTAINS(?code, ".") .
+
+        BIND(IRI(CONCAT("https://icd.who.int/browse10/2019/en#/", ?code)) AS ?concept_iri_code) .
+        BIND(IRI(CONCAT("https://icd.who.int/browse10/2019/en#/", strbefore(?code, "."))) AS ?concept_iri_top_level)
+    } }
+}

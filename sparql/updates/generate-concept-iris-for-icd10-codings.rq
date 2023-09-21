@@ -1,0 +1,23 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX fhir: <http://hl7.org/fhir/>
+
+# This SPARQL file is intended to look for FHIR Codings
+# (which we recognize from them having a system/code pair)
+# and to insert `?coding rdf:type ?concept_iri` triples to
+# represent them in a more RDF-like way, as suggested by
+# https://www.hl7.org/fhir/rdf.html#representing-concepts
+
+INSERT {
+	GRAPH <https://fhircat.org/reasoning1/concept-mappings> {
+		?coding a ?concept_iri
+	}
+} WHERE {
+	# Find codings that define an ICD-10 code.
+	?coding
+		fhir:Coding.system [ fhir:value "http://hl7.org/fhir/sid/icd-10-cm"^^<http://www.w3.org/2001/XMLSchema#anyURI> ] ;
+
+		fhir:Coding.code [ fhir:value ?code ] .
+
+	# Generate a concept IRI for ICD-10 codes.
+	BIND(IRI(CONCAT("https://icd.who.int/browse10/2019/en#/", ?code)) AS ?concept_iri) .
+}
